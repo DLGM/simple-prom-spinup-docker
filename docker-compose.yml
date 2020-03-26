@@ -1,0 +1,35 @@
+version: '3.7'
+
+volumes:
+    prometheus_data: {}
+    grafana_data: {}
+
+services:
+  prometheus:
+    image: prom/prometheus:${PROM_VER}
+    volumes:
+      - prometheus_data:/prometheus
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention.time=${PROM_DRH}h'
+    ports:
+      - '9090:9090'
+
+  node-exporter:
+    image: prom/node-exporter:${NODEXP_VER}
+    ports:
+        - '9100:9100'
+  grafana:
+    image: grafana/grafana:${GRAF_VER}
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./datasources:/etc/grafana/provisioning/datasources/
+      - ./dashboards:/etc/grafana/provisioning/dashboards/
+    environment: 
+      - GF_SECURITY_ADMIN_PASSWORD=pass
+    depends_on:
+      - prometheus
+    ports:
+      - '3000:3000'
