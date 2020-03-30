@@ -10,8 +10,14 @@ Another container with Node Exporter being scraped by Prometheus and Grafana con
 
 
 ## Usage
+All parameters are required in order the tool to work:
+* Prometheus_ver as: 2.17.0 or v2.17.0 
+* Prometheus_Storage_retention_hours as: 10 or 15 (in hours) 
+* Node_Exporter_version as 0.18.1 or v0.18.1
+* Grafana_version as 6.7.1 or v6.7.1
 
-```python
+command structure:
+```bash
 python spin.py Prometheus_ver Prometheus_Storage_retention_hours \
 Node_Exporter_version Grafana_version
 ```
